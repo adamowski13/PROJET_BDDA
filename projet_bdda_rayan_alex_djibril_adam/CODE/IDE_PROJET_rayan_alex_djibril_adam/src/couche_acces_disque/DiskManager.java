@@ -1,87 +1,94 @@
 package couche_acces_disque;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.util.*;
 
+
+
 public class DiskManager {
 	
-	private int totalPage;
-	private int freePage;
 
+	private Stack<PageId> pageDesAllouee = new Stack<PageId>();
+	private List<PageId> pageAllouee = new ArrayList<PageId>();
+	private int x;
 	
-	//constructeur
-	public DiskManager() {
-		
+	
+	public DiskManager(Stack<PageId> pageDesAllouee, List<PageId> pageAllouee) {
+		this.pageDesAllouee  = pageDesAllouee;
+		this.pageAllouee = pageAllouee;
+		this.x = 0;
 	}
 	
-    public PageId AllocPage(Stack<PageId> PageLibre, Stack<PageId> PageOccup) {
-        if (!PageLibre.isEmpty()) {
-            PageId page = PageLibre.pop();
-            PageOccup.push(page);
+    public PageId AllocPage() {
+        if (!pageDesAllouee.isEmpty()) {
+            PageId page = (PageId) pageDesAllouee.pop();
             System.out.println("Page allocated: " + page);
-            totalPage++;
             return page;
         } else {
-        	/*Sinon, rajouter une page (c’est à dire, rajouter pageSize octets, avec une valeur
-        	quelconque, à la fin du fichier) dans le fichier de la plus petite taille disponible 
-        	(les fichiers qui n’ont pas encore des pages rajoutées ont une taille 0, que vous les ayez créés ou pas,
-         	donc sont à considérer en priorité!) */
-        	totalPage++;
-        	return null;
+        	File repertoire = new File("/Users/rayanalmohaize/Desktop/depotGIT/PROJET_BDDA/projet_bdda_rayan_alex_djibril_adam/DB");
+            File[] fichiers = repertoire.listFiles();
+            
+            if (fichiers != null) {
+                for (File f : fichiers) {
+                	if(f.length()==0) {
+                		PageId page = new PageId(f.getName().charAt(1), x);
+                		x++;
+                		return page;
+                	}
+                	else {
+                		File minimum = fichiers[0];
+                		for(int i=1; i<fichiers.length; i++) {
+                			if(fichiers[i].length()<minimum.length()) {
+                				minimum = fichiers[i];
+                			}
+                		}
+                		PageId page = new PageId(minimum.getName().charAt(1), x);
+                		x++;
+                		return page;                		
+                	}
+                }
+            }
         }
-
+		return null;
     }
 	
     public void ReadPage(int pageId, ByteBuffer buff) {
+        String fileName = "F" + pageId + ".data";
         try {
-            String fileName = "F" + pageId + ".data"; 
-            RandomAccessFile file = new RandomAccessFile(fileName, "r");
-
-            long position = (long) pageId * buff.capacity();
-
-            file.seek(position);
-
-            byte[] bufferArray = new byte[buff.capacity()];
-            int bytesRead = file.read(bufferArray);
-
-            if (bytesRead != -1) {
-                buff.clear();
-                buff.put(bufferArray, 0, bytesRead);
-            }
-
-            file.close();
+            RandomAccessFile fichier = new RandomAccessFile(fileName, "r");
+            int bytesRead = fichier.read(buff.array());
+            buff.limit(bytesRead);
+            fichier.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     
     public void WritePage(int pageId, ByteBuffer buff) {
+        String fileName = "F" + pageId + ".data";
         try {
-            String fileName = "F" + pageId + ".data"; 
-            RandomAccessFile file = new RandomAccessFile(fileName, "w");
-            //remplir le buff
-            file.close();
+        	RandomAccessFile fichier = new RandomAccessFile(fileName, "rw");
+            fichier.write(buff.array(), 0, buff.position());
+            fichier.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     
-    public void DeallocPage(PageId pageId, Stack<PageId> PageLibre, Stack<PageId> PageOccup) {
-    	if(!PageOccup.empty()) {
-	    	pageId = PageOccup.pop();
-	    	PageLibre.push(pageId);
+    public void DeallocPage(PageId pageId) {
+    	for(int i=0; i<pageAllouee.size(); i++) {
+    		if(pageId.equals(pageAllouee.get(i))) {
+    			pageDesAllouee.push(pageId);
+    		}
     	}
-    	else {
-    		System.out.println("Toutes les pages sont libres");
-    	}
-    	freePage++;
     }
     
     public int GetCurrentCountAllocPages() {
-    	return this.totalPage - this.freePage;
+    	return pageAllouee.size();
     }
     
 }
