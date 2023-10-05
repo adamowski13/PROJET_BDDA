@@ -62,7 +62,7 @@ public class DiskManager {
         try {
             String fileName = "F" + pageId + ".data"; 
             RandomAccessFile file = new RandomAccessFile(fileName, "w");
-            
+            //remplir le buff
             file.close();
         } catch (IOException e) {
             e.printStackTrace();
