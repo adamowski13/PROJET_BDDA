@@ -12,8 +12,8 @@ public class Frame {
 	public Frame() {
 		this.pin_count = 0;
 		this.flag_dirty = 0;
-		this.pageId = null;
-		buffer = null;
+		this.pageId = new PageId();
+		this.buffer = ByteBuffer.allocate(0);
 	}
 
 	public ByteBuffer getBuffer() {
@@ -48,6 +48,11 @@ public class Frame {
 		this.flag_dirty = flag_dirty;
 	}
 	
-	
+	public void reinitFrame() {
+		this.pin_count = 0;
+		this.flag_dirty = 0;
+		this.pageId = new PageId();
+		this.buffer = ByteBuffer.allocate(0);
+	}
 	
 }
