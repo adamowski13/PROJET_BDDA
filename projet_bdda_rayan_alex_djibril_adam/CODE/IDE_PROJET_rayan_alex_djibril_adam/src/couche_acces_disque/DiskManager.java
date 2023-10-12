@@ -74,7 +74,7 @@ public class DiskManager {
         }
     }
     
-    public void WritePage(PageId pageId, ByteBuffer buff) {
+    public static void writePage(PageId pageId, ByteBuffer buff) {
         String filePath = DBParams.DBPath +"/F" + pageId.getFileIdx() + ".data";
         try {
         	RandomAccessFile fichier = new RandomAccessFile(filePath, "rw");
