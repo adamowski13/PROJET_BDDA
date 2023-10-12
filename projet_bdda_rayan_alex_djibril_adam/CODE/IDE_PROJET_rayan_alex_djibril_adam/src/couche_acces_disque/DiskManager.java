@@ -36,7 +36,7 @@ public class DiskManager {
             if (fichiers != null) {
                 for (File f : fichiers) {
                 	if(f.length()==0) {
-                		int fileId = f.getName().charAt(1) - '0'; //charAt() donne un char, un char converti en int donne le code ascii du char. On soustrait ´0'pour obtenir le nombre 
+                		int fileId = f.getName().charAt(1) - '0';  
                 		PageId page = new PageId(fileId, x);
                 		pageAllouee.add(page);
                 		x++;
