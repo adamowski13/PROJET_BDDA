@@ -4,9 +4,8 @@ public class Main {
 	
 	public static void main(String [] args) {
 		DBParams.DBPath = args[0];
-		DBParams.SGBDSGBDPageSize = 4096;
+		DBParams.SGBDPageSize = 4096;
 		DBParams.DMFileCount = 4;
-
 	}
 
 }
