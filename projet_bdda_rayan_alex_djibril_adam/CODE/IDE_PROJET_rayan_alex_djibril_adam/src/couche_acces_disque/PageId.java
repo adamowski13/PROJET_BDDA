@@ -9,6 +9,10 @@ public class PageId {
 		this.FileIdx = FileIdx;
 		this.PageIdx = PageIdx;
 	}
+	
+	public PageId() {
+		this(0, 0);
+	}
 
 	public int getFileIdx() {
 		return FileIdx;
@@ -30,7 +34,6 @@ public class PageId {
 	public String toString() {
 		return "PageId [FileIdx=" + FileIdx + ", PageIdx=" + PageIdx + "]";
 	}
-	
 	
 
 }
