@@ -7,11 +7,11 @@ public class Frame {
 	private ByteBuffer buffer;
 	private PageId pageId;
 	private int pin_count;
-	private boolean flag_dirty;
+	private int flag_dirty;
 	
 	public Frame() {
 		this.pin_count = 0;
-		this.flag_dirty = false;
+		this.flag_dirty = 0;
 		this.pageId = null;
 		buffer = null;
 	}
@@ -40,11 +40,11 @@ public class Frame {
 		this.pin_count = pin_count;
 	}
 
-	public boolean isFlag_dirty() {
+	public int isFlag_dirty() {
 		return flag_dirty;
 	}
 
-	public void setFlag_dirty(boolean flag_dirty) {
+	public void setFlag_dirty(int flag_dirty) {
 		this.flag_dirty = flag_dirty;
 	}
 	
