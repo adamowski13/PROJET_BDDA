@@ -14,14 +14,22 @@ public class DiskManager {
 
 	private Stack<PageId> pageDesAllouee;
 	private List<PageId> pageAllouee;
-	private int x;
-	
+	private int [] pageFichier;
+	private File[] fichiers;
 	
 	public DiskManager(Stack<PageId> pageDesAllouee, List<PageId> pageAllouee) {
 		this.pageDesAllouee  = pageDesAllouee;
 		this.pageAllouee = pageAllouee;
-		this.x = 0;
+		pageFichier = new int[4];
+		pageFichier[0]=0;
+		pageFichier[1]=0;
+		pageFichier[2]=0;
+		pageFichier[3]=0;
+		File repertoire = new File(DBParams.DBPath);
+		fichiers = repertoire.listFiles();
 	}
+	
+
 	
     public PageId AllocPage() {
         if (!pageDesAllouee.isEmpty()) {
@@ -30,16 +38,13 @@ public class DiskManager {
             pageAllouee.add(page);
             return page;
         } else {
-        	File repertoire = new File(DBParams.DBPath);
-            File[] fichiers = repertoire.listFiles();
-            
             if (fichiers != null) {
                 for (File f : fichiers) {
                 	if(f.length()==0) {
                 		int fileId = f.getName().charAt(1) - '0'; //charAt() donne un char, un char converti en int donne le code ascii du char. On soustrait ´0'pour obtenir le nombre 
-                		PageId page = new PageId(fileId, x);
+                		PageId page = new PageId(fileId, pageFichier[fileId]);
                 		pageAllouee.add(page);
-                		x++;
+                		pageFichier[fileId] +=1;
                 		return page;
                 	}else {
                 		File minimum = fichiers[0];
@@ -49,9 +54,9 @@ public class DiskManager {
                 			}
                 		}
                 		int fileId = minimum.getName().charAt(1)-'0';
-                		PageId page = new PageId(fileId, x);
+                		PageId page = new PageId(fileId, pageFichier[fileId]);
                 		pageAllouee.add(page);
-                		x++;
+                		pageFichier[fileId] += 1;
                 		return page;                		
                 	}
                 }
@@ -80,6 +85,7 @@ public class DiskManager {
         	RandomAccessFile fichier = new RandomAccessFile(filePath, "rw");
         	long startPos = pageId.getPageIdx()*DBParams.SGBDPageSize;
         	fichier.seek(startPos);
+        	buff.flip();
             fichier.write(buff.array(), 0, buff.limit());
             fichier.close();
         } catch (IOException e) {
