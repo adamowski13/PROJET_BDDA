@@ -39,6 +39,7 @@ public class BufferManager {
 		for(int i = 0; i<listFrame.size();i++) {
 			if(listFrame.get(i).getFlag_dirty() == 1) {
 				DiskManager.writePage(listFrame.get(i).getPageId(), listFrame.get(i).getBuffer());
+				listFrame.get(i).reinitFrame();
 			}
 		}
 	}
