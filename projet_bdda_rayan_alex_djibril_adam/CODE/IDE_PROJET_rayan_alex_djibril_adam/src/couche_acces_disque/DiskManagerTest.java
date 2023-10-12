@@ -34,7 +34,7 @@ public class DiskManagerTest {
     	String s = "aaabbb";
     	buff.clear();
     	buff.put(s.getBytes());
-        dm.WritePage(pi, buff);
+        dm.writePage(pi, buff);
     }
 
     public static void TestLecturePage(PageId pi, ByteBuffer buff, DiskManager dm){
