@@ -40,7 +40,7 @@ public class Frame {
 		this.pin_count = pin_count;
 	}
 
-	public int Flag_dirty() {
+	public int getFlag_dirty() {
 		return flag_dirty;
 	}
 
