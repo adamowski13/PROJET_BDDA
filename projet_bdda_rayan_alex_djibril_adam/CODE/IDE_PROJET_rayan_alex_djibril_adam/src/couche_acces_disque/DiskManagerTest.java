@@ -11,10 +11,10 @@ public class DiskManagerTest {
     	DBParams.SGBDPageSize = 7;
     	DiskManager.initialize();
         DiskManager dm = DiskManager.getInstance();
-        System.out.println(dm.GetCurrentCountAllocPages());
+        System.out.println(dm.getCurrentCountAllocPages());
         ByteBuffer b1 = ByteBuffer.allocate(DBParams.SGBDPageSize);
         //alloue une page
-        PageId pi1 = dm.AllocPage();
+        PageId pi1 = dm.allocPage();
         System.out.println("file id: "+ pi1.getFileIdx()+"page id: "+ pi1.getPageIdx());
         System.out.println("Test ecriture : ababab");
         //écrit sur la page allouée
@@ -34,11 +34,11 @@ public class DiskManagerTest {
     	String s = "ababab";
     	buff.clear();
     	buff.put(s.getBytes());
-        dm.WritePage(pi, buff);
+        dm.writePage(pi, buff);
     }
 
     public static void TestLecturePage(PageId pi, ByteBuffer buff, DiskManager dm){
-        dm.ReadPage(pi, buff);
+        dm.readPage(pi, buff);
     }
 
 }

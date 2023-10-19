@@ -43,7 +43,7 @@ public class DiskManager implements Serializable{
 		return instance;
 	}
     
-    public PageId AllocPage() {
+    public PageId allocPage() {
         if (!pageDesAllouee.isEmpty()) {
             PageId page = (PageId) pageDesAllouee.pop();
             System.out.println("Page allocated: " + page);
@@ -77,7 +77,7 @@ public class DiskManager implements Serializable{
 		return null;
     }
 	
-    public void ReadPage(PageId pageId, ByteBuffer buff) {
+    public void readPage(PageId pageId, ByteBuffer buff) {
         String filePath= DBParams.DBPath + "/F" + pageId.getFileIdx() + ".data";
         try {
             RandomAccessFile fichier = new RandomAccessFile(filePath, "r");
@@ -91,7 +91,7 @@ public class DiskManager implements Serializable{
         }
     }
     
-    public void WritePage(PageId pageId, ByteBuffer buff) {
+    public void writePage(PageId pageId, ByteBuffer buff) {
         String filePath = DBParams.DBPath +"/F" + pageId.getFileIdx() + ".data";
         try {
         	RandomAccessFile fichier = new RandomAccessFile(filePath, "rw");
@@ -105,7 +105,7 @@ public class DiskManager implements Serializable{
         }
     }
     
-    public void DeallocPage(PageId pageId) {
+    public void deallocPage(PageId pageId) {
     	for(int i=0; i<pageAllouee.size(); i++) {
     		if(pageId.equals(pageAllouee.get(i))) {
     			pageDesAllouee.push(pageId);
@@ -167,7 +167,7 @@ public class DiskManager implements Serializable{
     	instance = new DiskManager();
     }
     
-    public int GetCurrentCountAllocPages() {
+    public int getCurrentCountAllocPages() {
     	return pageAllouee.size();
     }
     
