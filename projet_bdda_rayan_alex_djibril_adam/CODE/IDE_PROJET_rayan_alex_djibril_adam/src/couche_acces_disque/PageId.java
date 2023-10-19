@@ -12,6 +12,10 @@ public class PageId implements Serializable{
 		this.FileIdx = FileIdx;
 		this.PageIdx = PageIdx;
 	}
+	
+	public PageId() {
+		this(0, 0);
+	}
 
 	public int getFileIdx() {
 		return FileIdx;
@@ -33,7 +37,6 @@ public class PageId implements Serializable{
 	public String toString() {
 		return "PageId [FileIdx=" + FileIdx + ", PageIdx=" + PageIdx + "]";
 	}
-	
 	
 
 }
