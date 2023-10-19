@@ -2,24 +2,31 @@ package couche_acces_disque;
 
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.RandomAccessFile;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.*;
 
 
 
-public class DiskManager {
-	
+public class DiskManager implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private Stack<PageId> pageDesAllouee;
 	private List<PageId> pageAllouee;
 	private int [] pageFichier;
 	private File[] fichiers;
+	private static DiskManager instance;
 	
-	public DiskManager(Stack<PageId> pageDesAllouee, List<PageId> pageAllouee) {
-		this.pageDesAllouee  = pageDesAllouee;
-		this.pageAllouee = pageAllouee;
+	private DiskManager() {
+		this.pageDesAllouee = new Stack<PageId>();
+		this.pageAllouee = new ArrayList<PageId>();
 		pageFichier = new int[4];
 		pageFichier[0]=0;
 		pageFichier[1]=0;
@@ -29,8 +36,13 @@ public class DiskManager {
 		fichiers = repertoire.listFiles();
 	}
 	
-
-	
+	public static DiskManager getInstance() {
+		if(instance == null) { 
+			instance = new DiskManager();
+		}
+		return instance;
+	}
+    
     public PageId AllocPage() {
         if (!pageDesAllouee.isEmpty()) {
             PageId page = (PageId) pageDesAllouee.pop();
@@ -102,11 +114,61 @@ public class DiskManager {
     	}
     }
     
+//https://stackoverflow.com/questions/8361301/how-to-read-and-rewrite-a-singleton-object-from-a-file
+    public static void persist(){
+        FileOutputStream fos = null;
+        ObjectOutputStream oos = null;
+        try{
+            fos = new FileOutputStream("Storage.data");
+            oos = new ObjectOutputStream(fos);
+            oos.writeObject(instance.pageDesAllouee);
+            oos.writeObject(instance.pageAllouee);
+            oos.writeObject(instance.pageFichier);
+            oos.writeObject(instance.fichiers);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                oos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public static void initialize(){
+        FileInputStream fis = null;
+        ObjectInputStream ois = null;
+        try{
+            fis = new FileInputStream("Storage.data");
+            ois = new ObjectInputStream(fis);
+            instance = DiskManager.getInstance();
+            instance.pageDesAllouee = (Stack<PageId>) ois.readObject();
+            instance.pageAllouee = (List<PageId>) ois.readObject();
+            instance.pageFichier = (int[]) ois.readObject();
+            instance.fichiers = (File[]) ois.readObject();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                ois.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    public static void reset() {
+    	instance = new DiskManager();
+    }
+    
     public int GetCurrentCountAllocPages() {
     	return pageAllouee.size();
     }
     
 }
-
-
-
