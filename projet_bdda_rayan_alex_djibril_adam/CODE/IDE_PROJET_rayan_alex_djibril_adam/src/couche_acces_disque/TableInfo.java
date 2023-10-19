@@ -8,7 +8,7 @@ public class TableInfo {
 		public TableInfo(String nomRel,int nbCol ){
 			this.nomRel = nomRel;
 			this.nbCol = nbCol;
-			colInfo = new ColInfo[nbCol];
+			
 		}
 		
 		
