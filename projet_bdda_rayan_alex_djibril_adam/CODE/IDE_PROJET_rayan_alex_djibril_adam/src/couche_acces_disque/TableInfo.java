@@ -1,17 +1,36 @@
 package couche_acces_disque;
 
+import java.util.*;
+
 public class TableInfo {
-		private String nomRel;
-		private int nbCol;
-		private ColInfo[] colInfo;
-		
-		public TableInfo(String nomRel,int nbCol ){
-			this.nomRel = nomRel;
-			this.nbCol = nbCol;
-			
-		}
-		
-		
-		
-		
+	
+	private String nomRelation;
+	private int nbrColonne;
+	private List<String> nomsColonne;
+	private List<String> typesColonne;
+	
+	public TableInfo(String nomRelation, int nbrColonne) {
+		this.nbrColonne = nbrColonne;
+		this.nomRelation = nomRelation;
+		this.nomsColonne = new ArrayList<String>();
+		this.typesColonne = new ArrayList<String>();
+	}
+
+	public String getNomRelation() {
+		return nomRelation;
+	}
+
+	public int getNbrColonne() {
+		return nbrColonne;
+	}
+
+	public List<String> getTypesColonne() {
+		return typesColonne;
+	}
+	
+	public List<String> getNomsColonne(){
+		return nomsColonne;
+	}
+	
+
 }
