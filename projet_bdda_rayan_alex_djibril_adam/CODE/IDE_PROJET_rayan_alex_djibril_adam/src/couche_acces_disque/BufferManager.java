@@ -14,10 +14,6 @@ public class BufferManager {
 		}
 	}
 	
-	public ByteBuffer getPage(PageId pageId) {
-		
-	}
-	
 	public void freePage(PageId pageId, int valdirty) {
 		for(int i = 0; i<listFrame.size();i++) {
 			if(listFrame.get(i).getPageId().equals(pageId)) {
@@ -35,14 +31,13 @@ public class BufferManager {
 		System.out.println("Erreur, page non trouvée dans le BufferManager");
 	}
 	
-	public void flushAll() {
+	/*public void flushAll() {
 		for(int i = 0; i<listFrame.size();i++) {
 			if(listFrame.get(i).getFlag_dirty() == 1) {
 				DiskManager.writePage(listFrame.get(i).getPageId(), listFrame.get(i).getBuffer());
 				listFrame.get(i).reinitFrame();
 			}
 		}
-	}
-
+	}*/
 	
 }

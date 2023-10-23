@@ -32,5 +32,5 @@ public class TableInfo {
 		return nomsColonne;
 	}
 	
-
+//test commit
 }
