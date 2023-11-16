@@ -3,9 +3,9 @@ package couche_acces_disque;
 import java.util.*;
 
 public class TableInfo {
-	
-	private String nomRelation;
+
 	private int nbrColonne;
+	private String nomRelation;
 	private List<String> nomsColonne;
 	private List<String> typesColonne;
 	
