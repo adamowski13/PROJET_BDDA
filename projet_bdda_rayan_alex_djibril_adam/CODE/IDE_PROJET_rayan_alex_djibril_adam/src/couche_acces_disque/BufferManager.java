@@ -6,12 +6,32 @@ import java.util.*;
 public class BufferManager {
 	
 	private List<Frame> listFrame;
+	private static BufferManager instance;
 
-	private BufferManager(){
+	private BufferManager(){ 
 		this.listFrame = new ArrayList<Frame>();
 		for(int i = 0;i<DBParams.FrameCount;i++) {
 			listFrame.add(new Frame());
 		}
+	}
+
+	public static BufferManager getInstance(){
+		if(instance == null){
+			instance = new BufferManager();
+		}
+		return instance;
+	}
+	
+	public ByteBuffer getPage(PageId pageId) {
+		DiskManager disk = DiskManager.getInstance();
+		ByteBuffer buff = ByteBuffer.allocate(pageId.getPageIdx()) ;
+		for(int i=0;i<listFrame.size();i++) {
+			if(listFrame.get(i).getPageId().equals(pageId)) {
+				return listFrame.get(i).getBuffer();
+			}
+		}
+		disk.readPage(pageId,buff);
+		return buff;
 	}
 	
 	public void freePage(PageId pageId, int valdirty) {
@@ -25,19 +45,22 @@ public class BufferManager {
 					framefree.setPin_count(framefree.getPin_count()-1);
 					framefree.setFlag_dirty(valdirty);
 				}
-			}
+			}    
 
 		}
 		System.out.println("Erreur, page non trouvée dans le BufferManager");
 	}
 	
-	/*public void flushAll() {
+	//effectue l’écriture de toutes les pages dont le flag dirty = 1 sur disque
+	//la remise à 0 de tous les flags/informations et contenus des buffers (buffer pool « vide »)
+	public void flushAll() {
+		DiskManager disk = DiskManager.getInstance();
 		for(int i = 0; i<listFrame.size();i++) {
 			if(listFrame.get(i).getFlag_dirty() == 1) {
-				DiskManager.writePage(listFrame.get(i).getPageId(), listFrame.get(i).getBuffer());
+				disk.writePage(listFrame.get(i).getPageId(), listFrame.get(i).getBuffer());
 				listFrame.get(i).reinitFrame();
 			}
 		}
-	}*/
+	}
 	
 }
