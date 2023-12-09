@@ -1,6 +1,5 @@
 package couche_acces_disque;
 
-import java.nio.ByteBuffer;
 
 public class FileManager {
 
@@ -14,7 +13,8 @@ public class FileManager {
         PageId newPage = disc.allocPage();
         BufferManager buff = BufferManager.getInstance();
         HeaderPage header = new HeaderPage(newPage);
-        header.getByteBuffer() = buff.getPage(newPage);
+        header.getByteBuffer().rewind();
+        header.getByteBuffer().put(buff.getPage(newPage));
         PageId fact1 = new PageId(-1,0);
         PageId fact2 = new PageId(-1,0);
         disc.writePage(fact1, header.getByteBuffer());
@@ -23,15 +23,18 @@ public class FileManager {
         return newPage;
     }
 
-    public PageId addDataPage(TableInfo tabinfo){
+    public PageId addDataPage(TableInfo tabinfo, HeaderPage header){
         DiskManager.initialize();
         DiskManager disc = DiskManager.getInstance();
         BufferManager buff = BufferManager.getInstance();
         PageId newPage = disc.allocPage();
 
-        ByteBuffer bytebuffer = ByteBuffer.allocate(newPage.getPageIdx());
-        bytebuffer = buff.getPage(newPage);
+        header.getByteBuffer().rewind();
+        header.getByteBuffer().put(buff.getPage(newPage));
 
+        disc.readPage(newPage, header.getByteBuffer());
+        TableInfo table =new TableInfo(null, 0, newPage);
+        table.setHeaderPageId(newPage);
         return newPage;
     }
 

@@ -8,12 +8,22 @@ public class TableInfo {
 	private String nomRelation;
 	private List<String> nomsColonne;
 	private List<String> typesColonne;
-	
-	public TableInfo(String nomRelation, int nbrColonne) {
+	private PageId headerPageId;
+
+	public TableInfo(String nomRelation, int nbrColonne, PageId page) {
 		this.nbrColonne = nbrColonne;
 		this.nomRelation = nomRelation;
 		this.nomsColonne = new ArrayList<String>();
 		this.typesColonne = new ArrayList<String>();
+		this.headerPageId = page;
+	}
+
+	public PageId getHeaderPageId() {
+		return headerPageId;
+	}
+
+	public void setHeaderPageId(PageId headerPageId) {
+		this.headerPageId = headerPageId;
 	}
 
 	public String getNomRelation() {
@@ -32,5 +42,4 @@ public class TableInfo {
 		return nomsColonne;
 	}
 	
-//test commit
 }

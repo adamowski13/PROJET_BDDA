@@ -43,6 +43,7 @@ public class DiskManager implements Serializable{
 		return instance;
 	}
     
+    /*Cette méthode doit allouer une page, c’est à dire réserver une nouvelle page à la demande d’une des couches au-dessus. */
     public PageId allocPage() {
         if (!pageDesAllouee.isEmpty()) {
             PageId page = (PageId) pageDesAllouee.pop();
@@ -77,6 +78,7 @@ public class DiskManager implements Serializable{
 		return null;
     }
 	
+    /*Cette méthode doit remplir l’argument buff avec le contenu disque de la page identifiée par l’argument pageId */
     public void readPage(PageId pageId, ByteBuffer buff) {
         String filePath= DBParams.DBPath + "/F" + pageId.getFileIdx() + ".data";
         try {
@@ -91,6 +93,7 @@ public class DiskManager implements Serializable{
         }
     }
     
+    /*Cette méthode écrit le contenu de l’argument buff dans le fichier et à la position indiqués par l’argument pageId. */
     public void writePage(PageId pageId, ByteBuffer buff) {
         String filePath = DBParams.DBPath +"/F" + pageId.getFileIdx() + ".data";
         try {
@@ -105,6 +108,7 @@ public class DiskManager implements Serializable{
         }
     }
     
+    /*Cette méthode doit désallouer une page, et la rajouter dans la liste des pages « disponibles » */
     public void deallocPage(PageId pageId) {
     	for(int i=0; i<pageAllouee.size(); i++) {
     		if(pageId.equals(pageAllouee.get(i))) {

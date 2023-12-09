@@ -1,8 +1,7 @@
 package couche_acces_disque;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Record {
     private TableInfo relInfo;
@@ -10,7 +9,7 @@ public class Record {
 
     public Record(TableInfo relInfo){
         this.relInfo=relInfo;
-        this.recvalues = new ArrayList<>();
+        this.recvalues = new ArrayList<String>();
     }
     public int writeToBuffer(ByteBuffer buff, int pos) {
         int oldPosition= pos;
@@ -31,13 +30,6 @@ public class Record {
             int taille = buff.position() - oldPosition;
             return taille;    
     }
-
-
-
-
-
-
-
 
 
     public int readFromBuffer(ByteBuffer buff, int pos) {
