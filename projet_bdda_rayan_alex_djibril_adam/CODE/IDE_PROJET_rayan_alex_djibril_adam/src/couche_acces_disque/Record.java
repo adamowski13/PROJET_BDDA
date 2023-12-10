@@ -27,8 +27,8 @@ public class Record {
                 }
             }
         }
-            int taille = buff.position() - oldPosition;
-            return taille;    
+        int taille = buff.position() - oldPosition;
+        return taille;    
     }
 
 

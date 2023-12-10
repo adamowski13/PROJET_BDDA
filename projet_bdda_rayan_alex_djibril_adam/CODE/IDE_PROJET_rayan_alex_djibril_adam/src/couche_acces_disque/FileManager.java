@@ -1,5 +1,6 @@
 package couche_acces_disque;
 
+import java.nio.ByteBuffer;
 
 public class FileManager {
 
@@ -23,6 +24,7 @@ public class FileManager {
         return newPage;
     }
 
+    //finir cette methode
     public PageId addDataPage(TableInfo tabinfo, HeaderPage header){
         DiskManager.initialize();
         DiskManager disc = DiskManager.getInstance();
@@ -36,6 +38,41 @@ public class FileManager {
         TableInfo table =new TableInfo(null, 0, newPage);
         table.setHeaderPageId(newPage);
         return newPage;
+    }
+
+    public PageId getFreeDataPageId(TableInfo tableInfo, int sizeRecord){
+        PageId newPage = new PageId();
+        if(tableInfo.getHeaderPageId().getPageIdx() == 0){
+            if(tableInfo.getNbrColonne() <=4){
+                newPage = tableInfo.getHeaderPageId();
+            }
+            return newPage;
+        }else if(tableInfo.getHeaderPageId().getPageIdx() == 1){
+            if(tableInfo.getNbrColonne() <=4){
+                newPage = tableInfo.getHeaderPageId();
+            }
+            return newPage;
+        }else if(tableInfo.getHeaderPageId().getPageIdx() == 2){
+            if(tableInfo.getNbrColonne() <=4){
+                newPage = tableInfo.getHeaderPageId();
+            }
+            return newPage;
+        }else if(tableInfo.getHeaderPageId().getPageIdx() == 3){
+            if(tableInfo.getNbrColonne() <=4){
+                newPage = tableInfo.getHeaderPageId();
+            }
+            return newPage;
+        }else{
+            return null;
+        }
+    }
+
+    public RecordId writeRecordToDataPage(Record record, PageId pageId){
+        ByteBuffer buff = ByteBuffer.allocate(1080);
+        int Pos1 = record.readFromBuffer(buff, 0);
+        int Pos2 = record.writeToBuffer(buff, Pos1);
+        RecordId newRecord = new RecordId(pageId);
+        return newRecord;
     }
 
 }
