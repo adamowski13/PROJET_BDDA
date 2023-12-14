@@ -59,6 +59,16 @@ public class Record {
         int taille = buff.position() - oldPosition;
         return taille;
     }
+
+    public TableInfo getRelInfo() {
+        return relInfo;
+    }
+    public ArrayList<String> getRecvalues() {
+        return recvalues;
+    }
+    public void setRelInfo(TableInfo relInfo) {
+        this.relInfo = relInfo;
+    }
         
 }
 
