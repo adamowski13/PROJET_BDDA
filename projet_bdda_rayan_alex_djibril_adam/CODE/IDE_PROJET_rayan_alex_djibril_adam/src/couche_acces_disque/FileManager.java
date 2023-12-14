@@ -1,6 +1,7 @@
 package couche_acces_disque;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 public class FileManager {
 
@@ -42,37 +43,49 @@ public class FileManager {
 
     public PageId getFreeDataPageId(TableInfo tableInfo, int sizeRecord){
         PageId newPage = new PageId();
-        if(tableInfo.getHeaderPageId().getPageIdx() == 0){
-            if(tableInfo.getNbrColonne() <=4){
-                newPage = tableInfo.getHeaderPageId();
+        newPage = null;
+        for(int i=0;i<sizeRecord;i++){
+            if(tableInfo.getHeaderPageId().getPageIdx() == 0){
+                if(tableInfo.getNbrColonne() <=4){
+                    newPage = tableInfo.getHeaderPageId();
+                }
+            }else if(tableInfo.getHeaderPageId().getPageIdx() == 1){
+                if(tableInfo.getNbrColonne() <=4){
+                    newPage = tableInfo.getHeaderPageId();
+                }
+            }else if(tableInfo.getHeaderPageId().getPageIdx() == 2){
+                if(tableInfo.getNbrColonne() <=4){
+                    newPage = tableInfo.getHeaderPageId();
+                }
+            }else if(tableInfo.getHeaderPageId().getPageIdx() == 3){
+                if(tableInfo.getNbrColonne() <=4){
+                    newPage = tableInfo.getHeaderPageId();
+                }
             }
-            return newPage;
-        }else if(tableInfo.getHeaderPageId().getPageIdx() == 1){
-            if(tableInfo.getNbrColonne() <=4){
-                newPage = tableInfo.getHeaderPageId();
-            }
-            return newPage;
-        }else if(tableInfo.getHeaderPageId().getPageIdx() == 2){
-            if(tableInfo.getNbrColonne() <=4){
-                newPage = tableInfo.getHeaderPageId();
-            }
-            return newPage;
-        }else if(tableInfo.getHeaderPageId().getPageIdx() == 3){
-            if(tableInfo.getNbrColonne() <=4){
-                newPage = tableInfo.getHeaderPageId();
-            }
-            return newPage;
-        }else{
-            return null;
         }
+        return newPage;
+        
     }
 
     public RecordId writeRecordToDataPage(Record record, PageId pageId){
-        ByteBuffer buff = ByteBuffer.allocate(1080);
-        int Pos1 = record.readFromBuffer(buff, 0);
-        int Pos2 = record.writeToBuffer(buff, Pos1);
-        RecordId newRecord = new RecordId(pageId);
+        DiskManager.initialize();
+        DiskManager disc = DiskManager.getInstance();
+        BufferManager buff = BufferManager.getInstance();
+        ByteBuffer bytebuffer = ByteBuffer.allocate(1080);
+        record.getRelInfo().setHeaderPageId(pageId);
+        int Pos1 = record.readFromBuffer(bytebuffer, 0);
+        record.writeToBuffer(bytebuffer, Pos1);
+        RecordId newRecord = new RecordId(record.getRelInfo().getHeaderPageId());
+        buff.freePage(pageId, 1);
+        disc.getPageAllouee().add(pageId);
         return newRecord;
+    }
+
+    public ArrayList<Record> getRecordsInDataPage(TableInfo tableInfo, PageId pageId){
+        ArrayList<Record> listeDeRecords = new ArrayList<Record>();
+        BufferManager buff = BufferManager.getInstance();
+        buff.freePage(pageId, 1);
+        return listeDeRecords;
     }
 
 }
