@@ -174,5 +174,15 @@ public class DiskManager implements Serializable{
     public int getCurrentCountAllocPages() {
     	return pageAllouee.size();
     }
+
+    public Stack<PageId> getPageDesAllouee() {
+        return pageDesAllouee;
+    }
+
+    public List<PageId> getPageAllouee() {
+        return pageAllouee;
+    }
+
+    
     
 }

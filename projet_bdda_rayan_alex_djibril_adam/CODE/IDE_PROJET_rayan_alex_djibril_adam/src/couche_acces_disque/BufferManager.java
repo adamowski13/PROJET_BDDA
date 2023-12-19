@@ -6,10 +6,12 @@ import java.util.*;
 public class BufferManager {
 	
 	private List<Frame> listFrame;
+	private PageId pageId;
 	private static BufferManager instance;
 
 	private BufferManager(){ 
 		this.listFrame = new ArrayList<Frame>();
+		this.pageId = new PageId();
 		for(int i = 0;i<DBParams.FrameCount;i++) {
 			listFrame.add(new Frame());
 		}
@@ -22,15 +24,29 @@ public class BufferManager {
 		return instance;
 	}
 	
+	public PageId getPageId() {
+		return pageId;
+	}
+
 	public ByteBuffer getPage(PageId pageId) {
+
 		DiskManager disk = DiskManager.getInstance();
-		ByteBuffer buff = ByteBuffer.allocate(pageId.getPageIdx()) ;
+		ByteBuffer buff = listFrame.get(0).getBuffer() ;
+
 		for(int i=0;i<listFrame.size();i++) {
-			if(listFrame.get(i).getPageId().equals(pageId)) {
-				return listFrame.get(i).getBuffer();
+
+			if(listFrame.get(i).getPageId().equals(pageId)) { // si la page existe déja
+				buff = listFrame.get(i).getBuffer();
+
+			}else if(listFrame.get(i).getPageId() == null){ // si la case est libre on uttilise la page
+
+				listFrame.get(i).setPageId(pageId);
+				listFrame.get(i).setFlag_dirty(1);
+				listFrame.get(i).setPin_count(1);
+				disk.readPage(pageId,listFrame.get(i).getBuffer());
+				buff = listFrame.get(i).getBuffer();
 			}
 		}
-		disk.readPage(pageId,buff);
 		return buff;
 	}
 	
