@@ -1,5 +1,8 @@
 package couche_acces_disque;
 
+/**
+ * Décrit l'Id d'un record
+ */
 public class RecordId {
     private PageId pageId;
     private int slotIdx;

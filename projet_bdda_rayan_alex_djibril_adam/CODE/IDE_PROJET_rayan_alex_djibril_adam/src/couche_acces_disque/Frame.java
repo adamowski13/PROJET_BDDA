@@ -2,6 +2,10 @@ package couche_acces_disque;
 
 import java.nio.*;
 
+/**
+ * 
+ * Décrit la partition sous forme de case de la mémoire
+ */
 public class Frame {
 	
 	private ByteBuffer buffer;

@@ -3,10 +3,25 @@ package couche_acces_disque;
 import java.nio.*;
 import java.util.*;
 
+/**
+ *Cette classe forme l'API du gestionnaire disque (elle sera appelé par les couches plus hautes)
+ *Gestionnaire du tampon
+ */
 public class BufferManager {
 	
+	/**
+	 * partition de la memoire disponible en un enssemble de case
+	 */
 	private List<Frame> listFrame;
+	
+	/**
+	 * Indentifiant de la page
+	 */
 	private PageId pageId;
+	
+	/**
+	 * Instance de BufferManager
+	 */
 	private static BufferManager instance;
 
 	private BufferManager(){ 
@@ -28,6 +43,12 @@ public class BufferManager {
 		return pageId;
 	}
 
+	/**
+	 * Cette méthode doit répondre à une demande de page venant des couches plus hautes, et donc retourner un des buffers associés à une frame.
+	 * Le buffer sera rempli avec le contenu de la page désignée par l’argument pageId
+	 * @param pageId l'identifiant de la page à partire de laquelle on rempli le buffer
+	 * @return le buffer rempli
+	 */
 	public ByteBuffer getPage(PageId pageId) {
 
 		DiskManager disk = DiskManager.getInstance();
@@ -50,6 +71,12 @@ public class BufferManager {
 		return buff;
 	}
 	
+	/**
+	 * Cette méthode devra décrémenter le pin_count et actualiser le flag dirty de la page 
+	 * (et aussi potentiellement actualiser des informations concernant la politique de remplacement)
+	 * @param pageId l'identifiant de la page pour laquelle on veux décrémenter le pin_count et actualiser le flag dirty
+	 * @param valdirty valeur du nouveau flag dirty
+	 */
 	public void freePage(PageId pageId, int valdirty) {
 		for(int i = 0; i<listFrame.size();i++) {
 			if(listFrame.get(i).getPageId().equals(pageId)) {
@@ -67,8 +94,10 @@ public class BufferManager {
 		System.out.println("Erreur, page non trouvée dans le BufferManager");
 	}
 	
-	//effectue l’écriture de toutes les pages dont le flag dirty = 1 sur disque
-	//la remise à 0 de tous les flags/informations et contenus des buffers (buffer pool « vide »)
+	/**
+	 * l’écriture de toutes les pages dont le flag dirty = 1 sur disque et la remise à 0 de tous 
+	 * les flags/informations et contenus des buffers (buffer pool « vide »)
+	 */
 	public void flushAll() {
 		DiskManager disk = DiskManager.getInstance();
 		for(int i = 0; i<listFrame.size();i++) {

@@ -2,6 +2,9 @@ package couche_acces_disque;
 
 import java.util.*;
 
+/**
+ * Ensemble d’informations spécifiques à une relation
+ */
 public class TableInfo {
 
 	private int nbrColonne;

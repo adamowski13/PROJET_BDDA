@@ -1,5 +1,8 @@
 package couche_acces_disque;
 
+/**
+ *Manipulation des commande de la base de donnée
+ */
 public class DatabaseManager {
     private DatabaseInfo data;
     private BufferManager buff;

@@ -2,10 +2,20 @@ package couche_acces_disque;
 
 import java.io.Serializable;
 
+/**
+ * Identifiant des pages
+ */
 public class PageId implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
+	/**
+	 * Identifiant du fichier
+	 */
 	private int FileIdx;
+	
+	/**
+	 * Indice de la page dans le fichier
+	 */
 	private int PageIdx;
 	
 	public PageId(int FileIdx, int PageIdx) {

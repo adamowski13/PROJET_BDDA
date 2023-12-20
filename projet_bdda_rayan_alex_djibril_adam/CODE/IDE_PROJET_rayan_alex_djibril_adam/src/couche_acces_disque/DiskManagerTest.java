@@ -3,6 +3,10 @@ package couche_acces_disque;
 import java.nio.*;
 import java.nio.charset.Charset;
 
+/**
+ * 
+ *Class de test pour diskManager
+ */
 public class DiskManagerTest {
     public static void main(String []args){
     	String filePath = "/home/alex/git/PROJET_BDDA/projet_bdda_rayan_alex_djibril_adam/DB";

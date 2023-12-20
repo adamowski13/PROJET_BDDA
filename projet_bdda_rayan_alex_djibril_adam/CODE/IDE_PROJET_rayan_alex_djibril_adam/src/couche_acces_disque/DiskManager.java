@@ -1,6 +1,5 @@
 package couche_acces_disque;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,15 +12,36 @@ import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.*;
 
-
-
+/**
+ * Cette classe forme l'API du gestionnaire disque (elle sera appelé par les couches plus hautes)
+ * Gestion de l'espace disque
+ */
 public class DiskManager implements Serializable{
 
 	private static final long serialVersionUID = 1L;
+	/**
+	 * Pile représentant les pages désalloué
+	 */
 	private Stack<PageId> pageDesAllouee;
+	
+	/**
+	 * Liste représentant les pages allou
+	 */
 	private List<PageId> pageAllouee;
+	
+	/**
+	 * Tableau des pages du fichier
+	 */
 	private int [] pageFichier;
+	
+	/**
+	 * fichier
+	 */
 	private File[] fichiers;
+	
+	/**
+	 * instance de la class DiskManager
+	 */
 	private static DiskManager instance;
 	
 	private DiskManager() {
@@ -42,8 +62,11 @@ public class DiskManager implements Serializable{
 		}
 		return instance;
 	}
-    
-    /*Cette méthode doit allouer une page, c’est à dire réserver une nouvelle page à la demande d’une des couches au-dessus. */
+    	
+	/**
+	 * Cette méthode doit allouer une page, c’est à dire réserver une nouvelle page à la demande d’une des couches au-dessus
+	 * @return une page s'il peut y avoir accés, null sinon
+	 */
     public PageId allocPage() {
         if (!pageDesAllouee.isEmpty()) {
             PageId page = (PageId) pageDesAllouee.pop();
@@ -78,7 +101,12 @@ public class DiskManager implements Serializable{
 		return null;
     }
 	
-    /*Cette méthode doit remplir l’argument buff avec le contenu disque de la page identifiée par l’argument pageId */
+    /**
+     * Cette méthode doit remplir l’argument buff avec le contenu disque de la page identifiée par l’argument pageId
+     * @param pageId l'identifiant de la page dans lequel on recupère les informations
+     * @param buff un tableau de bytes à remplire avec le contenu disque 
+     * de la page identifiée par l’argument pageId
+     */
     public void readPage(PageId pageId, ByteBuffer buff) {
         String filePath= DBParams.DBPath + "/F" + pageId.getFileIdx() + ".data";
         try {
@@ -93,7 +121,12 @@ public class DiskManager implements Serializable{
         }
     }
     
-    /*Cette méthode écrit le contenu de l’argument buff dans le fichier et à la position indiqués par l’argument pageId. */
+    /**
+     *Cette méthode écrit le contenu de l’argument buff dans le fichier et à la position indiqués par l’argument pageId.
+     * @param pageId l'identifiant de la page dans lequel on veut ecrir le contenu de l'agument buff
+     * @param buff un tableau de bytes à remplire dans lequel on recupere les données pour les ecrir dans 
+     * la page identifiée par l’argument pageId
+     */
     public void writePage(PageId pageId, ByteBuffer buff) {
         String filePath = DBParams.DBPath +"/F" + pageId.getFileIdx() + ".data";
         try {
@@ -108,7 +141,10 @@ public class DiskManager implements Serializable{
         }
     }
     
-    /*Cette méthode doit désallouer une page, et la rajouter dans la liste des pages « disponibles » */
+    /**
+     * Cette méthode doit désallouer une page, et la rajouter dans la liste des pages « disponibles » 
+     * @param pageId l'identifiant de la page à désalloué
+     */
     public void deallocPage(PageId pageId) {
     	for(int i=0; i<pageAllouee.size(); i++) {
     		if(pageId.equals(pageAllouee.get(i))) {

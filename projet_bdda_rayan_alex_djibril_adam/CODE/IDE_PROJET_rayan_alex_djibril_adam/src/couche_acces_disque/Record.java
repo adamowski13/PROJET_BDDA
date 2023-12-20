@@ -11,6 +11,14 @@ public class Record {
         this.relInfo=relInfo;
         this.recvalues = new ArrayList<String>();
     }
+    
+    /**
+     * Cette méthode doit écrire les valeurs du Record dans le buffer en partant de la position pos, 
+     * en utilisant le format à taille fixe ou variable tel que décrit ci-dessus.
+     * @param buff le buffer dans lequel on veut ecrir les valeurs du record
+     * @param pos position de départ pour la retranscription des donneées dans le buff
+     * @return le nombre d'octet total écris dans le buffer
+     */
     public int writeToBuffer(ByteBuffer buff, int pos) {
         int oldPosition= pos;
         buff.position(pos);
@@ -31,7 +39,12 @@ public class Record {
         return taille;    
     }
 
-
+    /**
+     * Cette méthode devra lire les valeurs du Record depuis le buffer à partir de pos.
+     * @param buff le buffer depuis lequel on veux lire les valeur du recode
+     * @param pos la position de départ de lecture
+     * @return le nombre total d'octet lu depuis le buffer
+     */
     public int readFromBuffer(ByteBuffer buff, int pos) {
         int oldPosition = pos;
 
