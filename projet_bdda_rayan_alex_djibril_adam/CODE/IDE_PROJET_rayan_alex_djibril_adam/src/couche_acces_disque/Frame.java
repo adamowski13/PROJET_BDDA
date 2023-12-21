@@ -52,6 +52,9 @@ public class Frame {
 		this.flag_dirty = flag_dirty;
 	}
 	
+	/**
+	 * réinitialise la case 
+	 */
 	public void reinitFrame() {
 		this.pin_count = 0;
 		this.flag_dirty = 0;

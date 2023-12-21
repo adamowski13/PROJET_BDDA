@@ -6,7 +6,10 @@ import java.util.*;
 public class Record {
     private TableInfo relInfo;
     private ArrayList<String> recvalues;
-
+    
+    /**
+     * Cette classe représente un enregistrement dans une table.
+     */
     public Record(TableInfo relInfo){
         this.relInfo=relInfo;
         this.recvalues = new ArrayList<String>();

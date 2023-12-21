@@ -1,6 +1,15 @@
 package couche_acces_disque;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,13 +26,54 @@ public class DatabaseInfo {
         nbrRelation = 0; 
     }
 
-    public void Init(){
-        String nomFichier = DBParams.DBPath + "DBInfo.save";
-        File file = new File(nomFichier);
-        //TO DO
+    public void Init() throws FileNotFoundException, ClassNotFoundException{
+        String filePath = "../../../../DB/DBInfo.save";
+        // créer un chemin pour sauvegarder
+        Path path = Paths.get(filePath);
+        if(Files.exists(path)){
+            try{
+                FileInputStream fileIn = new FileInputStream("DB/DBInfo.save");
+                ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+                DatabaseInfo dbInfo = (DatabaseInfo) objectIn.readObject();
+                objectIn.close();
+    
+            }    catch (FileNotFoundException ex) {
+                System.out.println("DBInfo.save non trouvé");}
+            catch (IOException ex){
+                ex.printStackTrace();
+            }
+        }
     }
-    public void Finish(){
-    //vide pour l'instant
+
+    public void Finish() throws IOException{
+            String filePath = "../../../../DB/DBInfo.save";
+            Path path = Paths.get(filePath);
+            if(Files.notExists(path)){
+        try{    
+
+            FileOutputStream DBInfoenregistrement = new FileOutputStream("../../../../DB/DBInfo.save");
+            ObjectOutputStream objectOut = new ObjectOutputStream(DBInfoenregistrement);
+            objectOut.writeObject(this);
+            objectOut.close();
+            System.out.println("DatabaseInfo enregistré dans DBInfo.save");
+
+    }   catch (IOException ex) {
+            ex.printStackTrace();
+        }        }
+        else{
+        
+        try{    
+
+            FileOutputStream DBInfoenregistrement = new FileOutputStream("../../../../DB/DBInfo.save");
+            ObjectOutputStream objectOut = new ObjectOutputStream(DBInfoenregistrement);
+            objectOut.writeObject(this);
+            objectOut.close();
+            System.out.println("DatabaseInfo enregistré dans DBInfo.save");
+
+    }   catch (IOException ex) {
+            ex.printStackTrace();
+        }     
+        }
     }
     
     /**

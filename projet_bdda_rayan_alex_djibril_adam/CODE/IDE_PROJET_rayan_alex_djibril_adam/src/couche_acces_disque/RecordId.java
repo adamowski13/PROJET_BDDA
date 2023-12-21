@@ -1,7 +1,8 @@
 package couche_acces_disque;
 
 /**
- * Décrit l'Id d'un record
+ * Décrit l'identifiant d'un enregistrement
+ * L'id d'un record en somme
  */
 public class RecordId {
     private PageId pageId;

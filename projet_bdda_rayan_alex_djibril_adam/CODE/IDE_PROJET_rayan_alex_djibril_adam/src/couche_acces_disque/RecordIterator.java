@@ -2,6 +2,9 @@ package couche_acces_disque;
 
 import java.nio.ByteBuffer;
 
+/**
+ * Cette classe représente un itérateur pour parcourir les enregistrements d'une page de données.
+ */
 public class RecordIterator {
     private TableInfo tabinfo;
     private PageId pageId;
@@ -9,8 +12,13 @@ public class RecordIterator {
     private FileManager file;
     private ByteBuffer datapge;
     private static int index;
-
-    //peut être des petit soucis ici on verra..
+    
+    /**
+     * Constructeur de la classe RecordIterator.
+     *
+     * @param tabinfo Informations sur la table associée à l'itérateur.
+     * @param pageId  Identifiant de la page de données à parcourir.
+     */
     public RecordIterator(TableInfo tabinfo, PageId pageId) {
         this.tabinfo = tabinfo;
         this.pageId = pageId;

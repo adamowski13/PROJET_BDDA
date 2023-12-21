@@ -4,12 +4,16 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
+/**
+ * Cette classe gère les opérations liées au système de fichiers.
+ */
 public class FileManager {
 
-    //pour la prochaine fois..
-    //on gère ici l'allocation d'une nouvelle page avec allocpage du Disckmanager
-    //on return le pageId rendu par le AllocPage
-    //il faut uttiliser un liste chainer avec deux pages ou ya rien avant et apres la page du allocPage en gros
+	/**
+     * Crée une nouvelle page d'en-tête et l'initialise.
+     *
+     * @return L'identifiant de la nouvelle page d'en-tête.
+     */
     public PageId createNewHeaderPage(){
         DiskManager.initialize();
         DiskManager disc = DiskManager.getInstance();
@@ -26,7 +30,13 @@ public class FileManager {
         return newPage;
     }
 
-    //finir cette methode
+    /**
+     * Ajoute une nouvelle page de données à l'en-tête spécifiée.
+     *
+     * @param tabinfo Les informations de la table.
+     * @param header L'en-tête de la table.
+     * @return L'identifiant de la nouvelle page de données.
+     */
     public PageId addDataPage(TableInfo tabinfo, HeaderPage header){
         DiskManager.initialize();
         DiskManager disc = DiskManager.getInstance();
@@ -41,7 +51,14 @@ public class FileManager {
         buff.freePage(tabinfo.getHeaderPageId(), 1);
         return newPage;
     }
-
+    
+    /**
+     * Obtient l'identifiant d'une page de données libre.
+     *
+     * @param tableInfo Les informations de la table.
+     * @param sizeRecord La taille du record.
+     * @return L'identifiant de la nouvelle page de données.
+     */
     public PageId getFreeDataPageId(TableInfo tableInfo, int sizeRecord){
         PageId newPage = new PageId();
         newPage = null;
@@ -67,7 +84,14 @@ public class FileManager {
         return newPage;
         
     }
-
+    
+    /**
+     * Écrit un record dans une page de données spécifiée.
+     *
+     * @param record Le record à écrire.
+     * @param pageId L'identifiant de la page de données.
+     * @return L'identifiant du record écrit.
+     */
     public RecordId writeRecordToDataPage(Record record, PageId pageId){
         DiskManager.initialize();
         DiskManager disc = DiskManager.getInstance();
@@ -82,8 +106,13 @@ public class FileManager {
         return newRecord;
     }
 
-
-    //a finir en gros vrm la j'abuse 
+    /**
+     * Obtient la liste des records dans une page de données spécifiée.
+     *
+     * @param tableInfo Les informations de la table.
+     * @param pageId L'identifiant de la page de données.
+     * @return La liste des records dans la page de données.
+     */
     public ArrayList<Record> getRecordsInDataPage(TableInfo tableInfo, PageId pageId){
         ArrayList<Record> listeDeRecords = new ArrayList<Record>();
         Record recordPage = new Record(tableInfo);
@@ -101,7 +130,13 @@ public class FileManager {
         return listeDeRecords;
     }
 
-    
+    /**
+     * Obtient la liste des pages de données associées à une table.
+     * fonction non terminer..
+     *
+     * @param tabinfo Les informations de la table.
+     * @return La liste des identifiants de pages de données.
+     */
     public ArrayList<PageId> getDataPages(TableInfo tabinfo){
         ArrayList<PageId> listeDePageId = new ArrayList<PageId>();
         BufferManager buff = BufferManager.getInstance();
@@ -111,11 +146,22 @@ public class FileManager {
         return listeDePageId;
     }
     
-
+    /**
+     * Insère un record dans une table.
+     *
+     * @param record Le record à insérer.
+     * @return L'identifiant du record inséré.
+     */
     public RecordId InsertRecordIntoTable(Record record){
         return new RecordId(record.getRelInfo().getHeaderPageId());
     }
-
+    
+    /**
+     * Obtient tous les records d'une table.
+     *
+     * @param tabinfo Les informations de la table.
+     * @return La liste de tous les records dans la table.
+     */
     public ArrayList<Record> GetAllRecords(TableInfo tabinfo){
         ArrayList<Record> listeDeRecords = new ArrayList<Record>();
         ArrayList<Record> listeRecordsInPage = new ArrayList<Record>();
@@ -132,6 +178,5 @@ public class FileManager {
         return listeDeRecords;
     }
 
-    //insert et import important le reste on s'en tappe en vrais
 
 }
